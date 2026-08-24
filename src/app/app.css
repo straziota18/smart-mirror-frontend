@@ -1,0 +1,10 @@
+.main-content {
+    height: 100%;
+    width: 100%;
+
+    .widget-wrapper {
+        border: 1px solid white;
+        cursor: move;
+        width: fit-content;
+    }
+}
