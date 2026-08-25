@@ -1,0 +1,9 @@
+.control-dialog-stepper-content {
+    height: stretch;
+
+    .parameters-step {
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+    }
+}

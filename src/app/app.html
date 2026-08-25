@@ -1,8 +1,11 @@
-<div #parent class="main-content">
+<div #parent class="main-content" (mouseup)="openDialog()">
   @for (item of widgets(); track item; let idx = $index, e = $even) {
   <div cdkDrag class="widget-wrapper"
+  (mouseenter)="disableDialog()"
+  (mouseleave)="enableDialog()"
+  (mousewheel)="editWidgetSize(item, $event)"
   cdkDragBoundary=".main-content"
   [cdkDragFreeDragPosition]="getPosition(parent, item)"
-  (cdkDragEnded)="onDragEnded(item, $event)">Display widget of type {{ item.widget_type }}</div>
+  (cdkDragEnded)="onDragEnded(item, $event)"><app-widget [widget]="item"></app-widget></div>
   }
 </div>

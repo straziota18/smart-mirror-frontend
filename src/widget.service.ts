@@ -3,8 +3,8 @@ import { webSocket } from 'rxjs/webSocket';
 import { Widget } from './widget';
 
 interface WebSocketMessage {
-  msg: 'widgets' | 'update_widget';
-  data: {[widget_id: string]: Widget} | Widget;
+  msg: 'widgets' | 'update_widget' | 'new_widget' | 'delete_widget';
+  data: {[widget_id: string]: Widget} | Widget | string;
 }
 
 @Injectable({
@@ -25,13 +25,26 @@ export class WidgetService {
             current[new_widget.widget_id] = new_widget;
             return current;
           });
+        } else if (it['msg'] === 'delete_widget') {
+          this.widgets.update(current => {
+            delete current[it['data'] as string];
+            return current;
+          });
         }
       },
       error: err => console.error(`Received WS error: ${err}`)
     })
   }
 
-  updateWidgetPosition(widget: Widget) {
+  updateWidget(widget: Widget) {
     this.ws.next({msg: 'update_widget', data: widget});
+  }
+
+  createWidget(widget: Widget) {
+    this.ws.next({msg: 'new_widget', data: widget});
+  }
+
+  deleteWidget(widgetId: string) {
+    this.ws.next({msg: 'delete_widget', data: widgetId});
   }
 }

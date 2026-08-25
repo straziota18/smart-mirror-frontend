@@ -1,0 +1,7 @@
+<div [ngStyle]="{'font-size': `${widget.size}px`, 'line-height': '1.2'}">
+    @switch(widget.widget_type) {
+        @case ('time') {{{ formatTime(currentTime(), timeWidget.tz) }}}
+        @case ('date') {{{ formatDate(currentTime(), timeWidget.tz) }}}
+        @default {Unknown/unhandled widget "{{ widget.widget_type }}"}
+    }
+</div>

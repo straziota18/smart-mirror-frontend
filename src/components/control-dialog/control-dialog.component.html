@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content>
+    <mat-stepper [linear]="true" #stepper class="control-dialog-stepper-content">
+        <mat-step [stepControl]="widgetTypeFormGroup">
+            <form [formGroup]="widgetTypeFormGroup">
+                <ng-template matStepLabel>Select widget type</ng-template>
+                <mat-form-field>
+                    <mat-label>Widget type</mat-label>
+                    <mat-select formControlName="widget_type">
+                        @for (widgetType of widgetTypes; track widgetType) {
+                        <mat-option [value]="widgetType.value">{{ widgetType.label }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <div>
+                    <button matButton matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="widgetParametersFormGroup">
+            <form [formGroup]="widgetParametersFormGroup" class="parameters-step">
+                @for (field of activeFields; track field.key) {
+                    @switch (field.field_type) {
+                        @case ('text')
+                        @case ('number') {
+                            <mat-form-field appearance="outline" class="w-full">
+                                <mat-label>{{ field.label }}</mat-label>
+                                <input matInput [type]="field.field_type" [formControlName]="field.key"
+                                    [placeholder]="field.placeholder || ''" />
+                            </mat-form-field>
+                        }
+                        @case ('select') {
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ field.label }}</mat-label>
+                                <mat-select [formControlName]="field.key">
+                                    @for (opt of field.options; track opt.value) {
+                                    <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        }
+                    }
+                }
+            </form>
+        </mat-step>
+    </mat-stepper>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button matButton mat-dialog-close>Cancel</button>
+  <button matButton [disabled]="!data.widget" [mat-dialog-close]="'delete'">Delete</button>
+  <button matButton [disabled]="!(widgetTypeFormGroup.valid && widgetParametersFormGroup.valid)" (click)="saveWidget()">Save</button>
+</mat-dialog-actions>
