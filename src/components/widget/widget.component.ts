@@ -25,7 +25,6 @@ export class WidgetComponent {
       timeZone,
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit', // Included seconds to demonstrate live updates
       hour12: false
     }).format(date);
   }
