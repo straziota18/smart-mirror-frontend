@@ -1,12 +1,12 @@
 import { T } from '@angular/cdk/keycodes';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, viewChild } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { Widget, WidgetType } from '../../widget';
 
 interface SelectOption {
@@ -47,6 +47,8 @@ export class ControlDialogComponent implements OnInit {
   private _formBuilder = inject(FormBuilder);
   data = inject<{title: string, widget?: Widget}>(MAT_DIALOG_DATA);
   readonly dialogRef = inject(MatDialogRef<ControlDialogComponent>);
+
+  readonly stepper = viewChild<MatStepper>('stepper');
 
   readonly widgetTypes = [
     { value: 'time', label: 'Time' },
@@ -91,6 +93,10 @@ export class ControlDialogComponent implements OnInit {
     this.widgetTypeFormGroup.get('widget_type')?.valueChanges.subscribe((t) => {
       this.buildParametersForm(t as WidgetType);
     });
+    if (this.data.widget) {
+      this.buildParametersForm(this.data.widget.widget_type);
+      this.stepper()!.selectedIndex = 1;
+    }
   }
 
   buildParametersForm(widgetType: WidgetType) {

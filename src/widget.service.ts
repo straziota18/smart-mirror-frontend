@@ -1,6 +1,7 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
 import { webSocket } from 'rxjs/webSocket';
 import { Widget } from './widget';
+import * as _ from 'lodash';
 
 interface WebSocketMessage {
   msg: 'widgets' | 'update_widget' | 'new_widget' | 'delete_widget';
@@ -22,13 +23,15 @@ export class WidgetService {
         } else if (it['msg'] === 'update_widget') {
           const new_widget = it['data'] as Widget;
           this.widgets.update(current => {
-            current[new_widget.widget_id] = new_widget;
-            return current;
+            const newResult = _.cloneDeep(current);
+            newResult[new_widget.widget_id] = new_widget;
+            return newResult;
           });
         } else if (it['msg'] === 'delete_widget') {
           this.widgets.update(current => {
-            delete current[it['data'] as string];
-            return current;
+            const newResult = _.cloneDeep(current);
+            delete newResult[it['data'] as string];
+            return newResult;
           });
         }
       },

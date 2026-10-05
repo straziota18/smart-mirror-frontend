@@ -2,6 +2,8 @@
   @for (item of widgets(); track item; let idx = $index, e = $even) {
   <div cdkDrag class="widget-wrapper"
   (mouseenter)="disableDialog()"
+  (click)="openDialog(item)"
+  [cdkDragStartDelay]="500"
   (mouseleave)="enableDialog()"
   (mousewheel)="editWidgetSize(item, $event)"
   cdkDragBoundary=".main-content"

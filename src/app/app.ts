@@ -47,7 +47,7 @@ export class App {
   }
 
   openDialog(widget?: Widget) {
-    if (!this.canOpenDialog) {
+    if (!this.canOpenDialog && !widget) {
       return;
     }
     const controlRef = this.matDialog.open(ControlDialogComponent, {
